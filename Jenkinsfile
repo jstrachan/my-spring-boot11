@@ -4,7 +4,7 @@ pipeline {
     }
     environment {
       ORG               = 'jenkinsx'
-      APP_NAME          = 'REPLACE_ME'
+      APP_NAME          = 'my-spring-boot11'
       GIT_CREDS         = credentials('jenkins-x-git')
       CHARTMUSEUM_CREDS = credentials('jenkins-x-chartmuseum')
       GIT_USERNAME      = "$GIT_CREDS_USR"
@@ -89,3 +89,4 @@ pipeline {
       }
     }
   }
+}
