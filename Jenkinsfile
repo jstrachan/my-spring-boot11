@@ -55,7 +55,7 @@ pipeline {
             sh "echo \$(jx-release-version) > VERSION"
             sh "mvn versions:set -DnewVersion=\$(cat VERSION)"
           }
-          dir ('./charts/REPLACE_ME') {
+          dir ('./charts/my-spring-boot11') {
             container('maven') {
               sh "make tag"
             }
@@ -66,7 +66,6 @@ pipeline {
             sh "docker build -f Dockerfile.release -t $JENKINS_X_DOCKER_REGISTRY_SERVICE_HOST:$JENKINS_X_DOCKER_REGISTRY_SERVICE_PORT/$ORG/$APP_NAME:\$(cat VERSION) ."
             sh "docker push $JENKINS_X_DOCKER_REGISTRY_SERVICE_HOST:$JENKINS_X_DOCKER_REGISTRY_SERVICE_PORT/$ORG/$APP_NAME:\$(cat VERSION)"
 
-            sh 'jx step changelog --version \$(cat VERSION)'
           }
         }
       }
@@ -75,9 +74,11 @@ pipeline {
           branch 'master'
         }
         steps {
-          dir ('./charts/REPLACE_ME') {
+          dir ('./charts/my-spring-boot11') {
             container('maven') {
-              // release the helm chart
+               sh 'jx step changelog --version \$(cat ../../VERSION)'
+
+                // release the helm chart
               sh 'make release'
 
               // promote through all 'Auto' promotion Environments
